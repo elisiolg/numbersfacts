@@ -1,25 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import SearchBox from './SearchBox';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component  {
+    constructor(){
+      super()
+      this.state = {
+          numbers: [],
+          searchfield: ''
+      }
+  }
+ 
+  onSearchChange = (e) =>{
+      this.setState({ searchfield: e.target.value});
+      fetch(`http://numbersapi.com/${this.state.searchfield}?json`)
+          .then(response => response.json())
+          .then(number => this.setState({numbers: number}))
+  }
+  
+  render() {
+
+    return (
+      <div className="App">
+        <h1>Type any number to know some facts</h1>
+        <SearchBox searchChange={this.onSearchChange}/>
+        <h2>{this.state.numbers.text}</h2>
+      </div>
+    );
+  }
 }
 
 export default App;
